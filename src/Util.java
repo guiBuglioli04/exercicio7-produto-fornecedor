@@ -1,3 +1,5 @@
+import java.text.DecimalFormat;
+
 import static javax.swing.JOptionPane.*;
 import static java.lang.Integer.parseInt;
 import static java.lang.Double.parseDouble;
@@ -10,7 +12,7 @@ public class Util {
 
     public void menu() {
         int opcao;
-        String msg = "1. Cadastrar produto\n2. Pesquisar produto" +
+        String msg = "1. Cadastrar produto\n2. Pesquisar produto\n" +
                 "3. Pesquisador fornecedor\n4. Finalizar";
 
         while(true) {
@@ -26,7 +28,7 @@ public class Util {
                     pesquisarProduto();
                     break;
                 case 3:
-                    pesquisarFornecedor();
+                    pesquisar();
                     break;
                 default:
                     showMessageDialog(null, "Opção inválida");
@@ -52,6 +54,16 @@ public class Util {
         idxProduto++;
     }
 
+    private void pesquisar(){
+        Fornecedor fornecedor = pesquisarFornecedor();
+        if (fornecedor !=null){
+            String aux = "";
+            aux +="Fornecedor: "+fornecedor.getNome()+"\n";
+            aux += "CNPJ: "+fornecedor.getCnpj()+"\n";
+            showMessageDialog(null,aux);
+        }
+    }
+
     private Fornecedor cadastrarFornecedor() {
         Fornecedor fornecedor;
         String nome = showInputDialog("Nome do fornecedor");
@@ -63,6 +75,18 @@ public class Util {
     }
 
     private void pesquisarProduto() {
+        DecimalFormat df = new DecimalFormat("0.00");
+        String aux = "Produto não encontrado";
+        String nome = showInputDialog("Nome do produto: ");
+        for (int i = 0; i < idxFornecedor; i++) {
+            if(produto[i].getNome().equalsIgnoreCase(nome)){
+                aux="";
+                aux+="Nome do produto: "+nome+"\n";
+                aux+= "valor unitário: "+df.format(produto[i].getValorUnitario())+"\n";
+                aux+= "Fornecedor: "+ produto[i].getFornecedor().getNome();
+            }
+        }
+        showMessageDialog(null, aux);
 
     }
 
